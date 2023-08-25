@@ -24,13 +24,15 @@ const topic = "teste12345"
 
 client.on('connect', () => {})
 
-app.get('/api/get', (req, res) => {
-    client.publish(topic, 'Otavinho', { qos: 0, retain: false }, (error) => {
+app.post('/api/post', (req, res) => {
+    const message = req.body;
+    client.publish(topic, message, { qos: 0, retain: false }, (error) => {
         if (error) {
             console.error(error)
         }
     })
     res.json({ message: 'Mensagem enviada' });
+    res.status(201).json(message);
 });
 
 // Inicie o servidor
