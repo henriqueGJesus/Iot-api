@@ -6,7 +6,7 @@ const cors = require('cors');
 // Mqtt 
 const mqtt = require('mqtt');
 const protocol = 'mqtt'
-const host = 'broker.emqx.io'
+const host = 'mqtt.tago.io'
 const portMqtt = '1883'
 const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
 const connectUrl = `${protocol}://${host}:${portMqtt}`
@@ -14,23 +14,25 @@ const client = mqtt.connect(connectUrl, {
     clientId,
     clean: true,
     connectTimeout: 4000,
-    username: 'emqx',
-    password: 'public',
+    username: 'Token',
+    password: 'a97ab245-bd1f-4e93-87eb-42b283bcdbd1',
     reconnectPeriod: 1000,
 })
-const topic = "teste12345"
+const topic = "casa/1"
 client.on('connect', () => {})
+
+client.publish(topic, "Ligar luz da Cozinha", { qos: 0, retain: false }, (error) => {
+    if (error) {
+        console.error(error)
+    }
+})
 
 // API
 app.use(cors({origin: '*'}));
 app.use(express.json());
 app.post('/api/post', (req, res) => {
     const message = req.body.mensagem;
-    client.publish(topic, message, { qos: 0, retain: false }, (error) => {
-        if (error) {
-            console.error(error)
-        }
-    })
+    
     res.status(201).json(message);
 });
 app.listen(port, () => {
