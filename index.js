@@ -31,15 +31,20 @@ app.use(cors({origin: '*'}));
 app.use(express.json());
 
 // Requisição para ligar/desligar luz
-app.get('/api/casa/:id/luz/:acao', (req, res) => {
+app.get('/api/casa/:id/luz/:luz/:acao', (req, res) => {
     const casaId = req.params.id;
+    const luz = req.params.luz;
     const acao = req.params.acao;
+
+    if (luz !== '1' && luz !== '2' && luz !== 'todas') {
+        return res.status(400).json({ error: 'A luz deve ser "1", "2" ou "todas".' });
+    }
 
     if (acao !== 'on' && acao !== 'off' && acao !== 'null') {
         return res.status(400).json({ error: 'A ação deve ser "on", "off" ou "null".' });
     }
 
-    client.publish(`${topic}${casaId}/luz`, acao, { qos: 0, retain: false }, (error) => { 
+    client.publish(`${topic}${casaId}/luz/${luz}`, acao, { qos: 0, retain: false }, (error) => { 
         if (error) {
             console.error(error)
             return res.status(500).json({ error: 'Erro ao publicar mensagem.' });
