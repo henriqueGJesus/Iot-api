@@ -3,6 +3,7 @@
 const mqtt = require('mqtt');
 const protocol = 'mqtt'
 const host = 'mqtt.tago.io'
+
 const portMqtt = '1883'
 const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
 const connectUrl = `${protocol}://${host}:${portMqtt}`
@@ -34,8 +35,8 @@ app.get('/api/casa/:id/luz/:acao', (req, res) => {
     const casaId = req.params.id;
     const acao = req.params.acao;
 
-    if (acao !== 'on' && acao !== 'off') {
-        return res.status(400).json({ error: 'A ação deve ser "on" ou "off".' });
+    if (acao !== 'on' && acao !== 'off' && acao !== 'null') {
+        return res.status(400).json({ error: 'A ação deve ser "on", "off" ou "null".' });
     }
 
     client.publish(`${topic}${casaId}/luz`, acao, { qos: 0, retain: false }, (error) => { 
@@ -53,7 +54,7 @@ app.get('/api/casa/:id/portao/:acao', (req, res) => {
     const casaId = req.params.id;
     const acao = req.params.acao;
 
-    if (acao !== 'on' && acao !== 'off') {
+    if (acao !== 'on' && acao !== 'off' && acao !== 'null') {
         return res.status(400).json({ error: 'A ação deve ser "on" ou "off".' });
     }
 
