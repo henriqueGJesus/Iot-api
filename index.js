@@ -55,22 +55,26 @@ app.get('/api/casa/:id/luz/:luz/:acao', (req, res) => {
 });
 
 // Requisição para abrir/fechar portão
+// app.get('/api/casa/:id/portao/:acao', (req, res) => {
+//     const casaId = req.params.id;
+//     const acao = req.params.acao;
+
+//     if (acao !== 'on' && acao !== 'off' && acao !== 'null') {
+//         return res.status(400).json({ error: 'A ação deve ser "on" ou "off".' });
+//     }
+
+//     client.publish(`${topic}${casaId}/portao`, acao, { qos: 0, retain: false }, (error) => { 
+//         if (error) {
+//             console.error(error)
+//             return res.status(500).json({ error: 'Erro ao publicar mensagem.' });
+//         }
+//     });
+
+//     return res.status(201).json();
+// });
+
 app.get('/teste', (req, res) => {
-    const casaId = req.params.id;
-    const acao = req.params.acao;
-
-    if (acao !== 'on' && acao !== 'off' && acao !== 'null') {
-        return res.status(400).json({ error: 'A ação deve ser "on" ou "off".' });
-    }
-
-    client.publish(`${topic}${casaId}/portao`, acao, { qos: 0, retain: false }, (error) => { 
-        if (error) {
-            console.error(error)
-            return res.status(500).json({ error: 'Erro ao publicar mensagem.' });
-        }
-    });
-
-    return res.status(201).json();
+    return res.status(201).json({ message: 'Teste' });
 });
 
 app.listen(port, () => {
