@@ -21,7 +21,7 @@ const client = mqtt.connect(connectUrl, {
     reconnectPeriod: 1000,
 })
 
-const topic = "casa/1"
+const topic = "api/casa/1/luz/1"
 
 client.on('connect', () => {})
 
