@@ -55,7 +55,7 @@ app.get('/api/casa/:id/luz/:luz/:acao', (req, res) => {
 });
 
 // Requisição para abrir/fechar portão
-app.get('/api/casa/:id/portao/:acao', (req, res) => {
+app.get('/teste', (req, res) => {
     const casaId = req.params.id;
     const acao = req.params.acao;
 

@@ -10,9 +10,8 @@ const server = http.createServer((req, res) => {
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws) => {
-    console.log('WebSocket connection established.');
+    console.log('WebSocket tá funcionando(conectado)');
 
-    // Handle WebSocket messages here.
     ws.on('message', (message) => {
         const msg = parseInt(message);
         console.log("Casa conectada: " + msg);
@@ -33,5 +32,5 @@ wss.on('connection', (ws) => {
 });
 
 server.listen(433, () => {
-    console.log(`Server is listening on port 433 (Websocket)`);
+    console.log(`Servidor está conectado 433 (Websocket dale)`);
 });
