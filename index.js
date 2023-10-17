@@ -1,97 +1,33 @@
 
 // Mqtt ===========================================
+
 const mqtt = require('mqtt');
-const protocol = 'mqtt'
-const host = 'mqtt.tago.io'
-
-const portMqtt = '1883'
-const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
-const connectUrl = `${protocol}://${host}:${portMqtt}`
-
-const client = mqtt.connect(connectUrl, {
-    clientId,
-    clean: true,
-    connectTimeout: 4000,
-    username: 'Token',
-    password: 'a97ab245-bd1f-4e93-87eb-42b283bcdbd1',
-    reconnectPeriod: 1000,
-})
-
-client.on('connect', () => {})
+const connectUrl = `mqtt://mqtt.tago.io:1883`;
+const { mqtt_especificacoes } = require('./src/mqtt/mqtt');
+const client = mqtt.connect(connectUrl, mqtt_especificacoes());
+client.on('connect', () => {});
 
 // API ============================================
 
 const express = require('express');
 const app = express();
-const port = 3000;
 const cors = require('cors');
-const topic = "casa/"
+const topic = "/api/casa/";
+const { luz, luz_todas } = require('./src/requisições/luz');
+const { portao } = require('./src/requisições/portao');
 
 app.use(cors({origin: '*'}));
 app.use(express.json());
 
 // Requisição para ligar/desligar luz
-app.get('/api/casa/:id/luz/:luz/:acao', (req, res) => {
-    const casaId = req.params.id;
-    const luz = req.params.luz;
-    const acao = req.params.acao;
+app.post(`${topic}:id/luz`, (req, res) => luz(req, res, client));
+app.post(`${topic}:id/luz/todas`, (req, res) => luz_todas(req, res, client));
 
-    if (luz !== '1' && luz !== '2' && luz !== 'todas') {
-        return res.status(400).json({ error: 'A luz deve ser "1", "2" ou "todas".' });
-    }
+// Requisição para abrir portão
+app.post(`${topic}:id/portao`, (req, res) => portao(req, res, client));
 
-    if (acao !== 'on' && acao !== 'off' && acao !== 'null') {
-        return res.status(400).json({ error: 'A ação deve ser "on", "off" ou "null".' });
-    }
 
-    client.publish(`${topic}${casaId}/luz/${luz}`, acao, { qos: 0, retain: false }, (error) => { 
-        if (error) {
-            console.error(error)
-            return res.status(500).json({ error: 'Erro ao publicar mensagem.' });
-        }
-    });
-
-    return res.status(201).json();
-});
-
-// Requisição para abrir/fechar portão
-// app.get('/api/casa/:id/portao/:acao', (req, res) => {
-//     const casaId = req.params.id;
-//     const acao = req.params.acao;
-
-//     if (acao !== 'on' && acao !== 'off' && acao !== 'null') {
-//         return res.status(400).json({ error: 'A ação deve ser "on" ou "off".' });
-//     }
-
-//     client.publish(`${topic}${casaId}/portao`, acao, { qos: 0, retain: false }, (error) => { 
-//         if (error) {
-//             console.error(error)
-//             return res.status(500).json({ error: 'Erro ao publicar mensagem.' });
-//         }
-//     });
-
-//     return res.status(201).json();
-// });
-
-app.get('/teste', (req, res) => {
-    return res.status(201).json({ message: 'Teste' });
-});
-
-app.listen(port, () => {
-    console.log(`Servidor rodando na porta ${port} (API)` );
-});
-
-/*
-    NOTA
-    
-    Deve ser testado se o frontend consegue utilizar
-    a tecnologia MQTT para se inscrever nos tópicos
-    necessários para pegar as informações de estado
-    dos dispositivos.
-
-    Utilizar a biblioteca mqtt.js no frontend
-    para permitir a conexão com o broker MQTT.
-*/
+app.listen(3000, () => console.log(`API rodando na porta ${3000}`));
 
 
 

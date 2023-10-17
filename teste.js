@@ -1,6 +1,5 @@
 /*
     NOTA
-
     Teste para verificar se o ESP
     está recebendo as mensagens
     enviadas pelo backend.
