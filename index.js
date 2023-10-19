@@ -23,6 +23,10 @@ app.use(express.json());
 app.post(`${topic}:id/luz`, (req, res) => luz(req, res, client));
 app.post(`${topic}:id/luz/todas`, (req, res) => luz_todas(req, res, client));
 
+
+//Ver necessidade
+app.post(`${topic}:id/luz/:id`, (req, res) => luz_comodo(req, res, client));
+
 // Requisição para abrir portão
 app.post(`${topic}:id/portao`, (req, res) => portao(req, res, client));
 

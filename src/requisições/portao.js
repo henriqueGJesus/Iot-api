@@ -12,7 +12,7 @@ function portao(req, res, client) {
         }
     });
 
-    return res.status(201).json();
+    return res.status(201).json({ message: "o estado do portão foi alterado!"});
 }
 
 module.exports = {
