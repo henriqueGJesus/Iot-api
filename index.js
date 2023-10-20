@@ -9,14 +9,14 @@ const client = mqtt.connect(connectUrl, mqtt_especificacoes());
 client.on('connect', () => {
     client.subscribe('api/casa/2/temperatura', (error) => {
         if (!error) {
-            console.log('Inscrito na luz 1 da casa 1');
+            console.log('Inscrito na temperatura do casa 2');
         } else {
             console.error('Subscription failed', error);
         }
     });
     client.subscribe('api/casa/3/gas', (error) => {
         if (!error) {
-            console.log('Inscrito na luz 2 da casa 1');
+            console.log('Inscrito no gás da casa 3');
         } else {
             console.error('Subscription failed', error);
         }
