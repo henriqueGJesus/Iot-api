@@ -15,7 +15,7 @@ function luz(req, res, client) {
         if (error) {
             console.error(error)
             return res.status(500).json({ error: 'Erro ao publicar mensagem.' });
-        }
+        } 
     });
     return res.status(201).json({ result: 'O estado da lampada foi alterado!' });
 }
