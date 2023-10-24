@@ -23,8 +23,8 @@ client.on('connect', () => {
     });
 });
 
-let gas = 0;
-let temperatura = 0;
+var gas = 0;
+var temperatura = 0;
 client.on('message', (topic, message) => {
     console.log(`Received message on topic ${topic}: ${message.toString()}`);
     if(topic == 'api/casa/2/temperatura'){
@@ -47,17 +47,15 @@ const { portao } = require('./src/requisições/portao');
 app.use(cors({origin: '*'}));
 app.use(express.json());
 
-// Requisição para ligar/desligar luz
+
 app.post(`${topic}:id/luz`, (req, res) => luz(req, res, client));
 app.post(`${topic}:id/luz/todas`, (req, res) => luz_todas(req, res, client));
 
-// Requisição para abrir portão
 app.post(`${topic}:id/portao`, (req, res) => portao(req, res, client));
 
+app.get(`${topic}2/temperatura`, (_, res) => temperatura(res, temperatura));
 
-// Requisição getters gás e temp
-app.get(`${topic}2/temperatura`, (req, res) => getTemperatura(res, temperatura));
-app.get(`${topic}3/gas`, (req, res) => getGas(res, gas));
+app.get(`${topic}3/gas`, (_, res) => gas(res, gas));
 
 
 app.listen(3000, () => console.log(`API rodando na porta ${3000}`));
