@@ -33,7 +33,7 @@ function luz_todas(req, res, client) {
             return res.status(500).json({ error: 'Erro ao publicar mensagem.' });
         }
     });
-    return res.status(201).json();
+    return res.status(201).json({ message: "Todas as lâmpadas tiveram seu estado alterado! "});
 }
 
 module.exports = { 
